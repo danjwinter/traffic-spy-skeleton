@@ -4,17 +4,6 @@ module TrafficSpy
 
   class Server < Sinatra::Base
 
-    use Rack::Auth::Basic, "Protected Area. If this is your first time logging on, enter new password here. If you are an existing user, enter password" do |username, password|
-      if User.exists?(identifier: username) && User.find_by(identifier: username).password == nil
-        User.find_by(identifier: username).update(password: password)
-      elsif User.exists?(identifier: username)
-        password == User.find_by(identifier: username).password
-      else
-        "Username does not exist. Must register user."
-        false
-      end
-    end
-
     helpers do
       def protected!
         return if authorized?
@@ -25,14 +14,18 @@ module TrafficSpy
       def authorized?
         @auth ||=  Rack::Auth::Basic::Request.new(request.env)
         user = User.find_by(identifier: @auth.credentials[0])
+        hashed_pass = Digest::SHA1.hexdigest(@auth.credentials[1])
         # binding.pry
-        @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == [user.identifier, user.password]
+        @auth.provided? and @auth.basic? and @auth.credentials and hashed_pass == user.password
+      end
+
+      def linked_path(full_path, extension)
+        "/sources/#{@user.identifier}/#{extension}/#{full_path.split('/')[-1]}"
       end
     end
 
 
     get '/' do
-      protected!
   erb :index
     end
 
