@@ -14,7 +14,7 @@ module TrafficSpy
         false
       end
     end
-    # 
+    #
     # helpers do
     #   def protected!
     #     return if authorized?
@@ -28,6 +28,7 @@ module TrafficSpy
     #     @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == [User.find_by(identifier: @auth.credentials[0]), User.find_by(identifier: @auth.credentials[0]).password]
     #   end
     # end
+
 
     get '/' do
       # protected!
@@ -60,6 +61,20 @@ module TrafficSpy
         @url_payloads = @user.payloads.where(url: full_path)
         erb :url_data, locals: { relative_path: relative_path }
       end
+    end
+
+    get '/sources/:id/events' do |id|
+      @user = TrafficSpy::User.find_by(identifier: id)
+      if @user.payloads.event_frequency.count == 0
+        erb :no_events, locals: { id: id }
+      else
+        erb :events_index
+      end
+    end
+
+    get '/sources/:id/events/:event_name' do |id, event_name|
+      @user = TrafficSpy::User.find_by(identifier: id)
+      erb :error
     end
 
     post '/sources' do
