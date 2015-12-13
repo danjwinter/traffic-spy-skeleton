@@ -26,7 +26,7 @@ module TrafficSpy
         if @user.payloads.count == 0
           erb :no_payload_data, locals: {id: id}
         else
-          erb :'application_stats_index/application_statistics'
+          erb :'landing', locals: {id: id}
         end
       end
 
@@ -49,6 +49,11 @@ module TrafficSpy
       else
         erb :identifier_does_not_exist, locals: {id: id}
       end
+    end
+
+    get '/sources/:id/main' do |id|
+      user(id)
+      erb :'application_stats_index/application_statistics', :layout => false
     end
 
     get '/sources/:id/urls/:relative_path' do |id, relative_path|
