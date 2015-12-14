@@ -18,8 +18,18 @@
 </div>
 
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   setTimeout (function() {
      $(".container").load("/sources/<%= id %>/update");
   }, 5000);
+</script> -->
+<script type="text/javascript">
+$.ajax({
+    url: "/sources/<%= id %>/update",
+    cache: false,
+    success: function(html){
+      $(".container").append(html);
+    }
+});
 </script>
+
