@@ -28,6 +28,6 @@ class TrafficTest < Minitest::Test
   end
 end
 
-class FeatureTest < TrafficTest 
+class FeatureTest < TrafficTest
   include Capybara::DSL
 end
