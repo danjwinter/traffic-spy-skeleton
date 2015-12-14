@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20151212213430) do
   create_table "users", force: :cascade do |t|
     t.string "identifier"
     t.string "root_url"
+    t.string "password"
   end
 
 end

@@ -43,6 +43,10 @@ module TrafficSpy
       erb :error
     end
 
+    get '/sources/:id/update' do |id|
+      erb :'application_stats_index/application_statistics', :layout => false
+    end
+
     get '/sources/:id' do |id|
       if user(id)
         stats_viewing(id)
@@ -51,9 +55,7 @@ module TrafficSpy
       end
     end
 
-    get '/sources/:id/update' do |id|
-      erb :updated, locals: {id: id},  :layout => false
-    end
+
 
     get '/sources/:id/urls/:relative_path' do |id, relative_path|
       user(id)
