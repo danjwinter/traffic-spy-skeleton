@@ -44,7 +44,10 @@ module TrafficSpy
     end
 
     get '/sources/:id' do |id|
-      if user(id)
+      if id.include?('.json')
+        json = TrafficSpy::JsonParser.new(id)
+        json.identifier_data
+      elsif user(id)
         stats_viewing(id)
       else
         erb :identifier_does_not_exist, locals: {id: id}
